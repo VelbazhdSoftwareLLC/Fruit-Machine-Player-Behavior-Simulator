@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<title>Fruit Machine Player Behavior Simulator</title>
+</head>
+
+<body>
+	<form name="gui" id="gui" class="" action="" method="post">
+		<input name="xlsx" id="xlsx" type="file" value="" />
+		<input type="button" name="load" id="load" value="Load Model" onclick="loadModel(document.getElementById('xlsx').files[0]);" />
+		<br/>
+		<textarea name="symbols" id="symbols" rows="20" cols="40"></textarea>
+		<textarea name="paytable" id="paytable" rows="20" cols="40"></textarea>
+		<textarea name="lines" id="lines" rows="20" cols="40"></textarea>
+		<br/>
+		<textarea name="base" id="base" rows="30" cols="40"></textarea>
+		<textarea name="free" id="free" rows="30" cols="40"></textarea>
+		<br/>
+	</form>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+
+	<script type="text/javascript">
+		loadModel = function(file) {
+			var reader = new FileReader();
+
+			reader.onload = function(event) {
+				var data = event.target.result;
+				var workbook = XLSX.read(data, {
+					type: 'binary'
+				});
+
+				workbook.SheetNames.forEach(function(sheetName) {
+					var row = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+					var json = JSON.stringify(row);
+					console.log(json);
+				})
+			};
+
+			reader.onerror = function(exception) {
+				console.log(exception);
+			};
+
+			reader.readAsBinaryString(file);
+		}
+	</script>
+</body>
+
+</html>
